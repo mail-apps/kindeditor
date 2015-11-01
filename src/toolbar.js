@@ -57,12 +57,6 @@ _extend(KToolbar, KWidget, {
 				if (knode.hasClass('ke-disabled')) {
 					return;
 				}
-				function getMail3Pane() {
-				  return Cc["@mozilla.org/appshell/window-mediator;1"]
-				          .getService(Ci.nsIWindowMediator)
-				          .getMostRecentWindow("mail:3pane");
-				}
-				getMail3Pane().eventController.controlEvent("click"+knode.attr('data-name')+"ButtonInComposeWindow");
 				self.options.click.call(this, e, knode.attr('data-name'));
 			}
 		});

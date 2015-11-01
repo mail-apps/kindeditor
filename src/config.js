@@ -33,11 +33,11 @@ K.options = {
 	dialogAlignType : 'page', // page, editor
 	useContextmenu : true,
 	fullscreenShortcut : false,
-	bodyClass : null,
+	bodyClass : 'ke-content',
 	indentChar : '\t', // \t, "  "
 	cssPath : '', //String or Array
 	cssData : '',
-	minWidth : 620,
+	minWidth : 650,
 	minHeight : 100,
 	minChangeSize : 50,
 	zIndex : 811213,

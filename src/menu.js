@@ -8,7 +8,7 @@ _extend(KMenu, KWidget, {
 		var self = this;
 		options.z = options.z || 811213;
 		KMenu.parent.init.call(self, options);
-		self.centerLineMode = false; //_undef(options.centerLineMode, true);
+		self.centerLineMode = _undef(options.centerLineMode, true);
 		self.div.addClass('ke-menu').bind('click,mousedown', function(e){
 			e.stopPropagation();
 		}).attr('unselectable', 'on');

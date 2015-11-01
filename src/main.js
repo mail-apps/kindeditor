@@ -675,9 +675,9 @@ KEditor.prototype = {
 			}
 		});
 		// create statusbar
-		// statusbar.removeClass('statusbar').addClass('ke-statusbar')
-		// 	.append('<span class="ke-inline-block ke-statusbar-center-icon"></span>')
-		// 	.append('<span class="ke-inline-block ke-statusbar-right-icon"></span>');
+		statusbar.removeClass('statusbar').addClass('ke-statusbar')
+			.append('<span class="ke-inline-block ke-statusbar-center-icon"></span>')
+			.append('<span class="ke-inline-block ke-statusbar-right-icon"></span>');
 
 		// remove resize event
 		if (self._fullscreenResizeHandler) {
@@ -703,8 +703,8 @@ KEditor.prototype = {
 			};
 			K(window).bind('resize', self._fullscreenResizeHandler);
 			toolbar.select('fullscreen');
-			//statusbar.first().css('visibility', 'hidden');
-			//statusbar.last().css('visibility', 'hidden');
+			statusbar.first().css('visibility', 'hidden');
+			statusbar.last().css('visibility', 'hidden');
 		} else {
 			if (_GECKO) {
 				K(window).bind('scroll', function(e) {
@@ -965,9 +965,9 @@ KEditor.prototype = {
 		try{
 			this.menu.remove();
 			this.menu = null;
-		}
-		catch(e)
-		{}
+		} catch(e) {
+          console.error(e);
+        }
 		
 		return this;
 	},
@@ -1433,7 +1433,6 @@ _plugin('core', function(K) {
 	// zs.unapply embedded object menu.
 	_each('link,image,flash,media,anchor'.split(','), function(i, name) {
 		var uName = name.charAt(0).toUpperCase() + name.substr(1);
-		//_each('edit,delete'.split(','), function(j, val) {
 		_each('delete'.split(','), function(j, val) {
 			self.addContextmenu({
 				title : self.lang(val + uName),
@@ -1698,7 +1697,7 @@ _plugin('core', function(K) {
 			if (full.match(/\sdata-ke-src="[^"]*"/i)) {
 				return full;
 			}
-			full = start + key + '="' + src + /*'"' + ' data-ke-src="' + _escape(src) + */'"' + end;
+			full = start + key + '="' + src + '"' + end;
 			return full;
 		})
 		.replace(/(<[^>]+\s)(on\w+="[^"]*"[^>]*>)/ig, function(full, start, end) {
