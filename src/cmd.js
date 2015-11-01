@@ -277,10 +277,10 @@ _extend(KCmd, {
 			sel.removeAllRanges();
 			sel.addRange(rng);
 			// Bugfix: https://github.com/kindsoft/kindeditor/issues/54
-			if (doc !== document) {
-				var pos = K(rng.endContainer).pos();
-				win.scrollTo(pos.x, pos.y);
-			}
+			//if (doc !== document) {
+			//	var pos = K(rng.endContainer).pos();
+			//	win.scrollTo(pos.x, pos.y);
+			//}
 		}
 		win.focus();
 		return self;
@@ -572,7 +572,7 @@ _extend(KCmd, {
 		if (key === 'fontfamily' || key === 'fontname') {
 			val = _nativeCommandValue(doc, 'fontname');
 			val = val.replace(/['"]/g, '');
-			return lc(val);
+			return val;//lc(val);
 		}
 		if (key === 'formatblock') {
 			val = _nativeCommandValue(doc, key);
@@ -751,7 +751,7 @@ _extend(KCmd, {
 	insertimage : function(url, title, width, height, border, align) {
 		title = _undef(title, '');
 		border = _undef(border, 0);
-		var html = '<img src="' + _escape(url) + '" data-ke-src="' + _escape(url) + '" ';
+		var html = '<img src="' + _escape(url) + /*'" data-ke-src="' + _escape(url) + */'" ';
 		if (width) {
 			html += 'width="' + _escape(width) + '" ';
 		}
@@ -841,7 +841,7 @@ _extend(KCmd, {
 });
 
 _each(('formatblock,selectall,justifyleft,justifycenter,justifyright,justifyfull,insertorderedlist,' +
-	'insertunorderedlist,indent,outdent,subscript,superscript').split(','), function(i, name) {
+	'insertunorderedlist,indent,outdent,subscript,superscript,delete').split(','), function(i, name) {
 	KCmd.prototype[name] = function(val) {
 		var self = this;
 		self.select();

@@ -25,14 +25,19 @@ _extend(KColorPicker, KWidget, {
 		table.cellPadding = 0;
 		table.cellSpacing = 0;
 		table.border = 0;
-		var row = table.insertRow(0), cell = row.insertCell(0);
-		cell.colSpan = colors[0].length;
-		self._addAttr(cell, '', 'ke-colorpicker-cell-top');
+		var row, cell;// = table.insertRow(0), cell = row.insertCell(0);
+		//cell.colSpan = colors[0].length;
+		//self._addAttr(cell, '', 'ke-colorpicker-cell-top');
 		for (var i = 0; i < colors.length; i++) {
-			row = table.insertRow(i + 1);
+			row = table.insertRow(i);
 			for (var j = 0; j < colors[i].length; j++) {
 				cell = row.insertCell(j);
-				self._addAttr(cell, colors[i][j], 'ke-colorpicker-cell');
+				if((i == 0 && j == colors[i].length -1) && colors[i][j] == '')
+				{
+					self._addAttr(cell, colors[i][j], 'ke-colorpicker-cell ke-colorpicker-Special-cell');
+				}
+				else
+					self._addAttr(cell, colors[i][j], 'ke-colorpicker-cell');
 			}
 		}
 	},
