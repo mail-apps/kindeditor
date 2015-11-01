@@ -715,6 +715,10 @@ _extend(KCmd, {
 			range.collapse(false);
 			self.select(false);
 		}
+		// Do a focus after the insert HTML make sure the body can still be editable
+		setTimeout(function(){
+			self.doc.body.focus()
+		})
 		// 全浏览器兼容，在IE上速度慢
 		function insertHtml(range, val) {
 			var doc = range.doc,
