@@ -298,7 +298,7 @@ KindEditor.plugin('image', function(K) {
 				clickFn : function(url, title, width, height, border, align) {
 					if (img) {
 						img.attr('src', url);
-						img.attr('data-ke-src', url);
+						//img.attr('data-ke-src', url);
 						img.attr('width', width);
 						img.attr('height', height);
 						img.attr('title', title);
@@ -324,5 +324,5 @@ KindEditor.plugin('image', function(K) {
 			self.addBookmark();
 		}
 	};
-	self.clickToolbar(name, self.plugin.image.edit);
+	//self.clickToolbar(name, self.plugin.image.edit);
 });

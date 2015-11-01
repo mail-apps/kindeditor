@@ -425,12 +425,39 @@ KEditor.prototype = {
 		}
 		return self.handler(key, fn);
 	},
+
+	getLocalFontName: function(val, callback) {
+		var fonts =this.lang('fontname.fontName');
+		for (var key in fonts) {
+			var _val = fonts[key];
+			if(val.toLowerCase() == key.toLowerCase() || val.toLowerCase() == _val.toLowerCase())
+			{
+				return callback(key, _val);
+			}
+		}
+		callback('default', fonts['default'])
+	},
+
 	updateState : function() {
 		var self = this;
 		_each(('justifyleft,justifycenter,justifyright,justifyfull,insertorderedlist,insertunorderedlist,' +
 			'subscript,superscript,bold,italic,underline,strikethrough').split(','), function(i, name) {
 			self.cmd.state(name) ? self.toolbar.select(name) : self.toolbar.unselect(name);
 		});
+		function updateFontInfo(name, elementName) {
+			var _ele = document.getElementById(elementName);
+			var _val = self.cmd.val(name);
+			if(name == 'fontname')
+			{
+				self.getLocalFontName(_val, function(key, val) {
+					_val = val;
+				});
+			}
+			if(_ele && _val) _ele.innerHTML = _val;
+		}
+
+		updateFontInfo('fontname', 'fontname-span');
+		updateFontInfo('fontsize', 'fontsize-span');
 		return self;
 	},
 	addContextmenu : function(item) {
@@ -524,8 +551,21 @@ KEditor.prototype = {
 			} else if (name == '/') {
 				htmlList.push('<div class="ke-hr"></div>');
 			} else {
-				htmlList.push('<span class="ke-outline" data-name="' + name + '" title="' + self.lang(name) + '" unselectable="on">');
-				htmlList.push('<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-' + name + '" unselectable="on"></span></span>');
+				
+				if(name == "forecolor" || name == "hilitecolor")
+				{
+					var btnname = name + "-btn";
+					htmlList.push('<span id="'+btnname+'" class="ke-outline" data-name="' + btnname + '" title="' + self.lang(name) + '" unselectable="on">');
+					htmlList.push('<span id="' +btnname+'-span" class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-' + btnname + '" unselectable="on"></span>');
+					htmlList.push('<span id="' +btnname+'-color-span" class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-' + btnname + '-color" unselectable="on"></span></span>');
+				}
+
+				if(i == 0){
+					htmlList.push('<span id="'+name+ '" class="ke-outline ke-outline-'+name+'" data-name="' + name + '" title="' + self.lang(name) + '" unselectable="on" style="margin-left: 32px;" >');
+				}else{
+					htmlList.push('<span id="'+name+ '" class="ke-outline ke-outline-'+name+'" data-name="' + name + '" title="' + self.lang(name) + '" unselectable="on">');
+				}
+				htmlList.push('<span id="' +name+'-span" class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-' + name + '" unselectable="on"></span></span>');
 			}
 		});
 		var toolbar = self.toolbar = _toolbar({
@@ -625,9 +665,9 @@ KEditor.prototype = {
 			}
 		});
 		// create statusbar
-		statusbar.removeClass('statusbar').addClass('ke-statusbar')
-			.append('<span class="ke-inline-block ke-statusbar-center-icon"></span>')
-			.append('<span class="ke-inline-block ke-statusbar-right-icon"></span>');
+		// statusbar.removeClass('statusbar').addClass('ke-statusbar')
+		// 	.append('<span class="ke-inline-block ke-statusbar-center-icon"></span>')
+		// 	.append('<span class="ke-inline-block ke-statusbar-right-icon"></span>');
 
 		// remove resize event
 		if (self._fullscreenResizeHandler) {
@@ -653,8 +693,8 @@ KEditor.prototype = {
 			};
 			K(window).bind('resize', self._fullscreenResizeHandler);
 			toolbar.select('fullscreen');
-			statusbar.first().css('visibility', 'hidden');
-			statusbar.last().css('visibility', 'hidden');
+			//statusbar.first().css('visibility', 'hidden');
+			//statusbar.last().css('visibility', 'hidden');
 		} else {
 			if (_GECKO) {
 				K(window).bind('scroll', function(e) {
@@ -912,8 +952,13 @@ KEditor.prototype = {
 		return self.menu;
 	},
 	hideMenu : function() {
-		this.menu.remove();
-		this.menu = null;
+		try{
+			this.menu.remove();
+			this.menu = null;
+		}
+		catch(e)
+		{}
+		
 		return this;
 	},
 	hideContextmenu : function() {
@@ -1253,9 +1298,17 @@ _plugin('core', function(K) {
 		_each(self.lang('fontname.fontName'), function(key, val) {
 			menu.addItem({
 				title : '<span style="font-family: ' + key + ';" unselectable="on">' + val + '</span>',
-				checked : (curVal === key.toLowerCase() || curVal === val.toLowerCase()),
+				checked : (curVal.toLowerCase() === key.toLowerCase() || curVal.toLowerCase() === val.toLowerCase()),
 				click : function() {
 					self.exec('fontname', key).hideMenu();
+					try{
+						var xx = document.getElementById('fontname-span');
+						xx.innerHTML = val;
+					}
+					catch(e)
+					{
+
+					}
 				}
 			});
 		});
@@ -1274,6 +1327,14 @@ _plugin('core', function(K) {
 				checked : curVal === val,
 				click : function() {
 					self.exec('fontsize', val).hideMenu();
+					try{
+						var xx = document.getElementById('fontsize-span');
+						xx.innerHTML = val;
+					}
+					catch(e)
+					{
+
+					}
 				}
 			});
 		});
@@ -1281,14 +1342,29 @@ _plugin('core', function(K) {
 	// forecolor,hilitecolor
 	_each('forecolor,hilitecolor'.split(','), function(i, name) {
 		self.clickToolbar(name, function() {
+			var currentTable;
+			if(name == 'forecolor')
+				currentTable = self.colorTable2;
+			else if(name == 'hilitecolor')
+				currentTable = self.colorTable;
+
 			self.createMenu({
 				name : name,
 				selectedColor : self.cmd.val(name) || 'default',
-				colors : self.colorTable,
+				colors : currentTable,
 				click : function(color) {
 					self.exec(name, color).hideMenu();
+					var colorSpan = document.getElementById(name + '-btn-color-span');
+					colorSpan.style.backgroundColor = color;
 				}
 			});
+		});
+	});
+	// forecolor,hilitecolor
+	_each('forecolor-btn,hilitecolor-btn'.split(','), function(i, name) {
+		self.clickToolbar(name, function() {
+			var colorSpan = document.getElementById(name + '-color-span');
+			self.exec(name.split('-')[0], colorSpan.style.backgroundColor);
 		});
 	});
 	// cut,copy,paste
@@ -1339,9 +1415,12 @@ _plugin('core', function(K) {
 			return img[0].className == 'ke-anchor';
 		});
 	};
+
+	// zs.unapply embedded object menu.
 	_each('link,image,flash,media,anchor'.split(','), function(i, name) {
 		var uName = name.charAt(0).toUpperCase() + name.substr(1);
-		_each('edit,delete'.split(','), function(j, val) {
+		//_each('edit,delete'.split(','), function(j, val) {
+		_each('delete'.split(','), function(j, val) {
 			self.addContextmenu({
 				title : self.lang(val + uName),
 				click : function() {
@@ -1458,6 +1537,18 @@ _plugin('core', function(K) {
 					html = html.replace(/\n/g, '<br />$&');
 				}
 			}
+			if (self.pasteType === 3) {
+				html = html.replace(/(<(?:p|p\s[^>]*)>) *(<\/p>)/ig, '');
+				// paste from ms word
+				if (/schemas-microsoft-com|worddocument|mso-\w+/i.test(html)) {
+					html = _clearMsWord(html, self.filterMode ? self.htmlTags : K.options.htmlTags);
+				} else {
+					html = _formatHtml(html, self.filterMode ? self.htmlTags : null);
+					html = self.beforeSetHtml(html);
+					html = '<blockquote type="cite">' + html + '</blockquote>';
+				}
+			}
+			self.pasteType = 2;
 			self.insertHtml(html, true);
 		}
 		K(doc.body).bind('paste', function(e){
@@ -1590,7 +1681,7 @@ _plugin('core', function(K) {
 			if (full.match(/\sdata-ke-src="[^"]*"/i)) {
 				return full;
 			}
-			full = start + key + '="' + src + '"' + ' data-ke-src="' + _escape(src) + '"' + end;
+			full = start + key + '="' + src + /*'"' + ' data-ke-src="' + _escape(src) + */'"' + end;
 			return full;
 		})
 		.replace(/(<[^>]+\s)(on\w+="[^"]*"[^>]*>)/ig, function(full, start, end) {

@@ -49,7 +49,7 @@ function _formatUrl(url, mode, host, pathname) {
 	mode = _undef(mode, '').toLowerCase();
 	// 移除连续斜线，比如，http://localhost/upload/file/201205//maincus.swf
 	// base64 data 除外
-	if (url.substr(0, 5) != 'data:') {
+	if (url.substr(0, 5) != 'data:' && url.substr(0,8) != 'mailbox:') {
 		url = url.replace(/([^:])\/\//g, '$1/');
 	}
 	if (_inArray(mode, ['absolute', 'relative', 'domain']) < 0) {

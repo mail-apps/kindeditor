@@ -8,6 +8,15 @@
 *******************************************************************************/
 
 KindEditor.lang({
+  menu_undo:          "撤销",
+  menu_cut:           "剪切",
+  menu_copy:          "复制",
+  menu_paste:         "粘帖",
+  menu_plainPaste:    "粘帖为无格式文本",
+  menu_quotePaste:    "粘帖为引文",
+  menu_delete:        "删除",
+  menu_selectAll:     "选择全部",
+  
 	source : 'HTML代码',
 	preview : '预览',
 	undo : '后退(Ctrl+Z)',
@@ -60,6 +69,7 @@ KindEditor.lang({
 	pagebreak : '插入分页符',
 	quickformat : '一键排版',
 	insertfile : '插入文件',
+  screenshot : '插入截屏',
 	template : '插入模板',
 	anchor : '锚点',
 	yes : '确定',
@@ -208,16 +218,17 @@ KindEditor.lang({
 	'fontname.fontName' : {
 		'SimSun' : '宋体',
 		'NSimSun' : '新宋体',
-		'FangSong_GB2312' : '仿宋_GB2312',
-		'KaiTi_GB2312' : '楷体_GB2312',
+		'FangSong_GB2312' : '仿宋',
+		'KaiTi_GB2312' : '楷体',
 		'SimHei' : '黑体',
 		'Microsoft YaHei' : '微软雅黑',
 		'Arial' : 'Arial',
 		'Arial Black' : 'Arial Black',
-		'Times New Roman' : 'Times New Roman',
+		'Times New Roman' : 'Times...Roman',
 		'Courier New' : 'Courier New',
 		'Tahoma' : 'Tahoma',
-		'Verdana' : 'Verdana'
+		'Verdana' : 'Verdana',
+		'default' : '默认字体'
 	},
 	'lineheight.lineHeight' : [
 		{'1' : '单倍行距'},
