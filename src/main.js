@@ -551,7 +551,6 @@ KEditor.prototype = {
 			} else if (name == '/') {
 				htmlList.push('<div class="ke-hr"></div>');
 			} else {
-				
 				if(name == "forecolor" || name == "hilitecolor")
 				{
 					var btnname = name + "-btn";
@@ -956,9 +955,9 @@ KEditor.prototype = {
 			this.menu.remove();
 			this.menu = null;
 		} catch(e) {
-          console.error(e);
-        }
-		
+			console.error(e);
+		}
+
 		return this;
 	},
 	hideContextmenu : function() {
