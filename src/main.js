@@ -1523,7 +1523,7 @@ _plugin('core', function(K) {
 				html = html.replace(/(<br>)\1/ig, '$1');
 			}
 			// paste HTML
-			if (self.pasteType === 2) {
+			if (self.pasteType === 2 || self.pasteType === 3) {
 				// 去除内容为空的p标签
 				html = html.replace(/(<(?:p|p\s[^>]*)>) *(<\/p>)/ig, '');
 				// paste from ms word
@@ -1533,6 +1533,9 @@ _plugin('core', function(K) {
 					html = _formatHtml(html, self.filterMode ? self.htmlTags : null);
 					html = self.beforeSetHtml(html);
 				}
+			}
+			if (self.pasteType === 3) {
+				html = '<blockquote type="cite">' + html + '</blockquote>';
 			}
 			// paste text
 			if (self.pasteType === 1) {
@@ -1550,18 +1553,7 @@ _plugin('core', function(K) {
 					html = html.replace(/\n/g, '<br />$&');
 				}
 			}
-			if (self.pasteType === 3) {
-				html = html.replace(/(<(?:p|p\s[^>]*)>) *(<\/p>)/ig, '');
-				// paste from ms word
-				if (/schemas-microsoft-com|worddocument|mso-\w+/i.test(html)) {
-					html = _clearMsWord(html, self.filterMode ? self.htmlTags : K.options.htmlTags);
-				} else {
-					html = _formatHtml(html, self.filterMode ? self.htmlTags : null);
-					html = self.beforeSetHtml(html);
-					html = '<blockquote type="cite">' + html + '</blockquote>';
-				}
-			}
-			self.pasteType = 2;
+			self.pasteType = 2; /* Always setting the paste mode to HTML */
 			self.insertHtml(html, true);
 		}
 		K(doc.body).bind('paste', function(e){
