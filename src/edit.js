@@ -69,12 +69,12 @@ _extend(KEdit, KWidget, {
 			bodyClass = options.bodyClass,
 			cssPath = options.cssPath,
 			cssData = options.cssData,
-			isDocumentDomain = location.protocol != 'chrome:' && location.protocol != 'res:' && location.host.replace(/:\d+/, '') !== document.domain,
+			isDocumentDomain = document.domain !== null && location.protocol != 'res:' && location.host.replace(/:\d+/, '') !== document.domain,
 			srcScript = ('document.open();' +
 				(isDocumentDomain ? 'document.domain="' + document.domain + '";' : '') +
 				'document.close();'),
 			iframeSrc = _IE ? ' src="javascript:void(function(){' + encodeURIComponent(srcScript) + '}())"' : '';
-		self.iframe = K('<iframe class="ke-edit-iframe" hidefocus="true" frameborder="0"' + iframeSrc + '></iframe>').css('width', '100%');
+		self.iframe = K('<iframe type="content-primary" class="ke-edit-iframe" hidefocus="true" frameborder="0"' + iframeSrc + '></iframe>').css('width', '100%');
 		self.textarea = K('<textarea class="ke-edit-textarea" hidefocus="true"></textarea>').css('width', '100%');
 		self.tabIndex = isNaN(parseInt(options.tabIndex, 10)) ? self.srcElement.attr('tabindex') : parseInt(options.tabIndex, 10);
 		self.iframe.attr('tabindex', self.tabIndex);
@@ -146,7 +146,7 @@ _extend(KEdit, KWidget, {
 				doc.body.contentEditable = true;
 				doc.body.removeAttribute('disabled');
 			} else {
-				doc.designMode = 'on';
+				doc.body.setAttribute('contenteditable', true);
 			}
 			if (options.afterCreate) {
 				options.afterCreate.call(self);

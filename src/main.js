@@ -927,7 +927,7 @@ KEditor.prototype = {
 		if (_IE) {
 			doc.body.contentEditable = !isReadonly;
 		} else {
-			doc.designMode = isReadonly ? 'off' : 'on';
+			doc.body.setAttribute('contenteditable', !isReadonly);
 		}
 		edit.textarea[0].disabled = isReadonly;
 	},
