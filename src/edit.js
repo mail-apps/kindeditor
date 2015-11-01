@@ -11,33 +11,27 @@ if ((html = document.getElementsByTagName('html'))) {
 
 function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
 	var arr = [
-		(_direction === '' ? '<html>' : `<html dir="${_direction}">`),
-		'<head>',
-		'  <meta charset="utf-8" />',
-		'  <title></title>',
-		`  <style></style>`,
+		(_direction === '' ? '<html>' : '<html dir="' + _direction + '">'),
+		'<head><meta charset="utf-8" /><title></title>',
+		'<style>',
+		'html {margin:0;padding:0;}',
+		'body {margin:0;padding:0;}',
+		'body, p, div {word-wrap: break-word;}',
+		'p {margin: 0;}',
+		'</style>'
 	];
 	if (!_isArray(cssPath)) {
 		cssPath = [cssPath];
 	}
 	_each(cssPath, function(i, path) {
 		if (path) {
-			arr.push(`<link href="${path}" rel="stylesheet" />`);
+			arr.push('<link href="' + path + '" rel="stylesheet" />');
 		}
 	});
 	if (cssData) {
-		arr.push('  <style>');
-		arr.push(cssData);
-		arr.push('  </style>');
+		arr.push('<style>' + cssData + '</style>');
 	}
-	var bodyClassStr = bodyClass ? ` class="${bodyClass}"`: '';
-
-	Array.prototype.push.apply(arr, [
-		'</head>',
-		`<body${bodyClassStr}>`,
-		`</body>`,
-		'</html>',
-	]);
+	arr.push('</head><body ' + (bodyClass ? 'class="' + bodyClass + '"' : '') + '></body></html>');
 	return arr.join('\n');
 }
 
