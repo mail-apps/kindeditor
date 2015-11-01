@@ -338,16 +338,6 @@ function KEditor(options) {
 		}
 	});
 	var se = K(self.srcElement || '<textarea/>');
-	if (!self.width) {
-		self.width = se[0].style.width || se.width();
-	}
-	if (!self.height) {
-		self.height = se[0].style.height || se.height();
-	}
-	setOption('width', _undef(self.width, self.minWidth));
-	setOption('height', _undef(self.height, self.minHeight));
-	setOption('width', _addUnit(self.width));
-	setOption('height', _addUnit(self.height));
 	if (_MOBILE && (!_IOS || _V < 534)) {
 		self.designMode = false;
 	}

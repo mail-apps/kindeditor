@@ -95,8 +95,6 @@ _extend(KWidget, {
 		self.x = _addUnit(options.x);
 		self.y = _addUnit(options.y);
 		self.z = options.z;
-		self.width = _addUnit(options.width);
-		self.height = _addUnit(options.height);
 		self.div = K('<div style="display:block;"></div>');
 		self.options = options;
 		// pravate properties
