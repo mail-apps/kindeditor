@@ -608,6 +608,7 @@ KEditor.prototype = {
 				self.edit = edit = this;
 				self.afterSetHtml();
 			},
+			getInitHtml: self.options.getInitHtml,
 			afterCreate : function() {
 				self.edit = edit = this;
 				self.cmd = edit.cmd;

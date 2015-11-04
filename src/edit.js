@@ -15,9 +15,54 @@ function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
 		'<head><meta charset="utf-8" /><title></title>',
 		'<style>',
 		'html {margin:0;padding:0;}',
-		'body {margin:0;padding:0;}',
+		'body {margin:0;padding:5px;}',
+		'body, td {font:12px/1.5 "sans serif",tahoma,verdana,helvetica;}',
 		'body, p, div {word-wrap: break-word;}',
-		'p {margin: 0;}',
+		'p {margin:5px 0;}',
+		'table {border-collapse:collapse;}',
+		'img {border:0;}',
+		'noscript {display:none;}',
+		'table.ke-zeroborder td {border:1px dotted #AAA;}',
+		'img.ke-flash {',
+		'	border:1px solid #AAA;',
+		'	background-image:url(' + themesPath + 'common/flash.gif);',
+		'	background-position:center center;',
+		'	background-repeat:no-repeat;',
+		'	width:100px;',
+		'	height:100px;',
+		'}',
+		'img.ke-rm {',
+		'	border:1px solid #AAA;',
+		'	background-image:url(' + themesPath + 'common/rm.gif);',
+		'	background-position:center center;',
+		'	background-repeat:no-repeat;',
+		'	width:100px;',
+		'	height:100px;',
+		'}',
+		'img.ke-media {',
+		'	border:1px solid #AAA;',
+		'	background-image:url(' + themesPath + 'common/media.gif);',
+		'	background-position:center center;',
+		'	background-repeat:no-repeat;',
+		'	width:100px;',
+		'	height:100px;',
+		'}',
+		'img.ke-anchor {',
+		'	border:1px dashed #666;',
+		'	width:16px;',
+		'	height:16px;',
+		'}',
+		'.ke-script, .ke-noscript, .ke-display-none {',
+		'	display:none;',
+		'	font-size:0;',
+		'	width:0;',
+		'	height:0;',
+		'}',
+		'.ke-pagebreak {',
+		'	border:1px dotted #AAA;',
+		'	font-size:0;',
+		'	height:2px;',
+		'}',
 		'</style>'
 	];
 	if (!_isArray(cssPath)) {
@@ -97,7 +142,11 @@ _extend(KEdit, KWidget, {
 			if (isDocumentDomain) {
 				doc.domain = document.domain;
 			}
-			doc.write(_getInitHtml(themesPath, bodyClass, cssPath, cssData));
+			if (options.getInitHtml) {
+					doc.write(options.getInitHtml(themesPath, bodyClass, cssPath, cssData));
+			} else {
+					doc.write(_getInitHtml(themesPath, bodyClass, cssPath, cssData));
+			}
 			doc.close();
 			self.win = self.iframe[0].contentWindow;
 			self.doc = doc;
@@ -146,7 +195,8 @@ _extend(KEdit, KWidget, {
 				doc.body.contentEditable = true;
 				doc.body.removeAttribute('disabled');
 			} else {
-				doc.body.setAttribute('contenteditable', true);
+				doc.body.contentEditable = true;
+				//doc.body.setAttribute('contenteditable', true);
 			}
 			if (options.afterCreate) {
 				options.afterCreate.call(self);
